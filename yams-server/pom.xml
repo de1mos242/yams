@@ -23,6 +23,7 @@
         <r2dbc-postgres.version>0.8.10.RELEASE</r2dbc-postgres.version>
         <jdbc-postgres.version>42.2.19</jdbc-postgres.version>
         <jooq.version>3.15.4</jooq.version>
+        <jackson-kotlin.version>2.12.3</jackson-kotlin.version>
     </properties>
 
     <dependencyManagement>
@@ -97,6 +98,11 @@
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-slf4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>${jackson-kotlin.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -132,6 +138,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -273,6 +280,27 @@
                                 </target>
                             </generator>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
