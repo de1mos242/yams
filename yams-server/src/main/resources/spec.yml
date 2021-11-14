@@ -38,6 +38,10 @@ paths:
                 $ref: '#/components/schemas/user'
         409:
           description: Username already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
 
   /api/messages:
     get:
@@ -50,7 +54,8 @@ paths:
           name: X-CurrentUserId
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
         - in: query
           name: userId
           description: User identifier.
@@ -62,11 +67,7 @@ paths:
           description: Search query type.
           name: searchType
           schema:
-            type: string
-            enum:
-              - sent
-              - received
-              - from
+            $ref: '#/components/schemas/searchType'
       responses:
         200:
           description: A JSON array of messages
@@ -78,8 +79,16 @@ paths:
                   $ref: '#/components/schemas/message'
         403:
           description: Current user does not exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
         404:
           description: Sender user not found for query type 'From'.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
     post:
       summary: Send a message
       operationId: sendMessage
@@ -90,7 +99,8 @@ paths:
           name: X-CurrentUserId
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
       requestBody:
         required: true
         content:
@@ -102,12 +112,22 @@ paths:
           description: Ok
         403:
           description: Current user does not exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
         404:
           description: Target user not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
         409:
           description: Sender and receiver are the save user.
-
-
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
 
 components:
   schemas:
@@ -141,6 +161,9 @@ components:
 
     message:
       properties:
+        id:
+          type: integer
+          format: int64
         content:
           type: string
         sender:
@@ -149,5 +172,17 @@ components:
           $ref: '#/components/schemas/user'
         timestamp:
           type: string
-          format: datetime
+          format: 'date-time'
           description: Message timestamp in UTC.
+
+    searchType:
+      type: string
+      enum:
+        - from
+        - sent
+        - received
+
+    errorResponse:
+      properties:
+        message:
+          type: string
