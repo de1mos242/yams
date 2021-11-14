@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import kotlin.test.assertEquals
@@ -58,7 +59,7 @@ internal class MessagesManagementServiceTest {
             verify(messagesRepository).insert(c.capture())
         }
 
-        val expected = MessagesRecord(null, senderId, receiverId, content, now.atOffset(ZoneOffset.UTC))
+        val expected = MessagesRecord(null, senderId, receiverId, content, now.atOffset(ZoneOffset.UTC).toLocalDateTime())
         assertEquals(expected, c.firstValue)
     }
 
@@ -71,7 +72,7 @@ internal class MessagesManagementServiceTest {
 
     @Test
     fun `Search from`() {
-        val now = OffsetDateTime.now()
+        val now = OffsetDateTime.now(ZoneOffset.UTC)
         val messages = listOf(
             Message(1, "q1", User(42, "den"), User(50, "vik"), now),
             Message(2, "q2", User(42, "den"), User(50, "vik"), now.plusMinutes(1)),
@@ -80,7 +81,7 @@ internal class MessagesManagementServiceTest {
         )
         whenever(messagesRepository.getMessagesFromUserToUser(50, 42)).thenReturn(flow {
             messages.forEach { m ->
-                emit(buildRecord(m.id!!, m.sender!!.id!!, m.sender!!.username!!, m.receiver!!.id!!, m.receiver!!.username!!, m.content!!, m.timestamp!!))
+                emit(buildRecord(m.id!!, m.sender!!.id!!, m.sender!!.username!!, m.receiver!!.id!!, m.receiver!!.username!!, m.content!!, m.timestamp!!.toLocalDateTime()))
             }
         })
         val flow = messagesManagementService.searchMessages(42, SearchType.from, 50)
@@ -90,7 +91,7 @@ internal class MessagesManagementServiceTest {
 
     @Test
     fun `Search sent`() {
-        val now = OffsetDateTime.now()
+        val now = OffsetDateTime.now(ZoneOffset.UTC)
         val messages = listOf(
             Message(1, "q1", User(42, "den"), User(50, "vik"), now),
             Message(2, "q2", User(42, "den"), User(25, "liza"), now.plusMinutes(1)),
@@ -99,7 +100,7 @@ internal class MessagesManagementServiceTest {
         )
         whenever(messagesRepository.getMessagesSentByUser(42)).thenReturn(flow {
             messages.forEach { m ->
-                emit(buildRecord(m.id!!, m.sender!!.id!!, m.sender!!.username!!, m.receiver!!.id!!, m.receiver!!.username!!, m.content!!, m.timestamp!!))
+                emit(buildRecord(m.id!!, m.sender!!.id!!, m.sender!!.username!!, m.receiver!!.id!!, m.receiver!!.username!!, m.content!!, m.timestamp!!.toLocalDateTime()))
             }
         })
         val flow = messagesManagementService.searchMessages(42, SearchType.sent, null)
@@ -107,7 +108,7 @@ internal class MessagesManagementServiceTest {
         assertEquals(messages, actualMessages)
     }
 
-    private fun buildRecord(id: Long, senderId: Long, senderName: String, receiverId: Long, receiverName: String, content: String, ts: OffsetDateTime): Record {
+    private fun buildRecord(id: Long, senderId: Long, senderName: String, receiverId: Long, receiverName: String, content: String, ts: LocalDateTime): Record {
         val record: Record = mock()
         whenever(record.into(Messages.MESSAGES.`as`("message"))).thenReturn(MessagesRecord(id, senderId, receiverId, content, ts))
         whenever(record.into(Users.USERS.`as`("sender"))).thenReturn(UsersRecord(senderId, senderName))

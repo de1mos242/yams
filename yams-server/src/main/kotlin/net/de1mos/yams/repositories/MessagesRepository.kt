@@ -22,11 +22,14 @@ class MessagesRepository(private val ctx: DSLContext) {
         val sender = USERS.`as`("sender")
         val receiver = USERS.`as`("receiver")
         val messages = MESSAGES.`as`("message")
-        return Flux.from(ctx.select().from(messages)
-            .innerJoin(sender).on(messages.SENDER_ID.eq(sender.ID))
-            .innerJoin(receiver).on(messages.RECEIVER_ID.eq(receiver.ID))
-            .where(messages.SENDER_ID.eq(senderId))
-            .and(messages.RECEIVER_ID.eq(receiverId)))
+        return Flux.from(
+            ctx.select().from(messages)
+                .innerJoin(sender).on(messages.SENDER_ID.eq(sender.ID))
+                .innerJoin(receiver).on(messages.RECEIVER_ID.eq(receiver.ID))
+                .where(messages.SENDER_ID.eq(senderId))
+                .and(messages.RECEIVER_ID.eq(receiverId))
+                .orderBy(messages.MESSAGE_TIMESTAMP.asc())
+        )
             .asFlow()
     }
 
@@ -34,21 +37,25 @@ class MessagesRepository(private val ctx: DSLContext) {
         val sender = USERS.`as`("sender")
         val receiver = USERS.`as`("receiver")
         val messages = MESSAGES.`as`("message")
-        return Flux.from(ctx.select().from(messages)
-            .innerJoin(sender).on(messages.SENDER_ID.eq(sender.ID))
-            .innerJoin(receiver).on(messages.RECEIVER_ID.eq(receiver.ID))
-            .where(messages.SENDER_ID.eq(senderId)))
-            .asFlow()
+        return Flux.from(
+            ctx.select().from(messages)
+                .innerJoin(sender).on(messages.SENDER_ID.eq(sender.ID))
+                .innerJoin(receiver).on(messages.RECEIVER_ID.eq(receiver.ID))
+                .where(messages.SENDER_ID.eq(senderId))
+                .orderBy(messages.MESSAGE_TIMESTAMP.asc())
+        ).asFlow()
     }
 
     fun getMessagesReceivedByUser(receiverId: Long): Flow<Record> {
         val sender = USERS.`as`("sender")
         val receiver = USERS.`as`("receiver")
         val messages = MESSAGES.`as`("message")
-        return Flux.from(ctx.select().from(messages)
-            .innerJoin(sender).on(messages.SENDER_ID.eq(sender.ID))
-            .innerJoin(receiver).on(messages.RECEIVER_ID.eq(receiver.ID))
-            .where(messages.RECEIVER_ID.eq(receiverId)))
-            .asFlow()
+        return Flux.from(
+            ctx.select().from(messages)
+                .innerJoin(sender).on(messages.SENDER_ID.eq(sender.ID))
+                .innerJoin(receiver).on(messages.RECEIVER_ID.eq(receiver.ID))
+                .where(messages.RECEIVER_ID.eq(receiverId))
+                .orderBy(messages.MESSAGE_TIMESTAMP.asc())
+        ).asFlow()
     }
 }

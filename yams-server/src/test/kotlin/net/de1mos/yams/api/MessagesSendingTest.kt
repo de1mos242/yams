@@ -1,6 +1,7 @@
 package net.de1mos.yams.api
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import net.de1mos.yams.CurrentUserDoesNotExistException
@@ -45,19 +46,21 @@ class MessagesSendingTest {
 
     @Test
     fun `Successful message sending`() {
-        val senderId = 42
+        val senderId = 42L
         val receiverId = 100500L
         val content = "Hello, my dear friend"
-        runBlocking {
-            whenever(messagesManagementService.addMessage(any(), any())).thenReturn(null)
-        }
 
+        val messageRequest = MessageRequest(content, receiverId)
         webTestClient.post()
             .uri("/api/messages")
-            .body(BodyInserters.fromValue(MessageRequest(content, receiverId)))
+            .body(BodyInserters.fromValue(messageRequest))
             .header("X-CurrentUserId", senderId.toString())
             .exchange()
             .expectStatus().isOk
+
+        runBlocking {
+            verify(messagesManagementService).addMessage(senderId, messageRequest)
+        }
     }
 
     @Test

@@ -1,4 +1,4 @@
-yams.db.url: postgresql://localhost:5432/yams
+yams.db.url: postgresql://localhost:15432/yams
 
 spring:
   r2dbc:

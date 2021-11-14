@@ -8,3 +8,12 @@ services:
       POSTGRES_USER: yams
     ports:
       - "5432:5432"
+
+  postgres_test:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: SecretPassword
+      POSTGRES_DB: yams
+      POSTGRES_USER: yams
+    ports:
+      - "15432:5432"

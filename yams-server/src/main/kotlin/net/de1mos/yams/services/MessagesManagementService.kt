@@ -27,7 +27,7 @@ class MessagesManagementService(
         message.content = messageRequest.content
         message.senderId = senderId
         message.receiverId = messageRequest.receiverId
-        message.messageTimestamp = ts
+        message.messageTimestamp = ts.toLocalDateTime()
         messagesRepository.insert(message)
     }
 

@@ -12,6 +12,7 @@ import org.jooq.Record
 import org.jooq.Record3
 import org.junit.jupiter.api.Test
 import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import kotlin.test.assertEquals
 
 internal class DataMapperTest {
@@ -26,9 +27,9 @@ internal class DataMapperTest {
 
     @Test
     fun `convert message`() {
-        val now = OffsetDateTime.now()
+        val now = OffsetDateTime.now(ZoneOffset.UTC)
         val record: Record = mock()
-        whenever(record.into(MESSAGES.`as`("message"))).thenReturn(MessagesRecord(1, 42, 50, "super", now))
+        whenever(record.into(MESSAGES.`as`("message"))).thenReturn(MessagesRecord(1, 42, 50, "super", now.toLocalDateTime()))
         whenever(record.into(USERS.`as`("sender"))).thenReturn(UsersRecord(42, "den"))
         whenever(record.into(USERS.`as`("receiver"))).thenReturn(UsersRecord(50, "vik"))
         val message = dataMapper.messageToApi(record)
