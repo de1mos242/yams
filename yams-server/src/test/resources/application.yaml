@@ -1,0 +1,12 @@
+yams.db.url: postgresql://localhost:5432/yams
+
+spring:
+  r2dbc:
+    url: r2dbc:${yams.db.url}
+    username: yams
+    password: SecretPassword
+
+  flyway:
+    url: jdbc:${yams.db.url}
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}

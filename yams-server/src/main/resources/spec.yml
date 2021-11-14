@@ -110,6 +110,12 @@ paths:
       responses:
         200:
           description: Ok
+        400:
+          description: Sender and receiver are the same user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
         403:
           description: Current user does not exists.
           content:
@@ -118,12 +124,6 @@ paths:
                 $ref: '#/components/schemas/errorResponse'
         404:
           description: Target user not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorResponse'
-        409:
-          description: Sender and receiver are the save user.
           content:
             application/json:
               schema:

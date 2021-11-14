@@ -4,7 +4,7 @@ CREATE TABLE messages
     sender_id         BIGINT NOT NULL,
     receiver_id       BIGINT NOT NULL,
     content           TEXT   NOT NULL,
-    message_timestamp TIMESTAMP,
+    message_timestamp TIMESTAMPTZ,
 
     FOREIGN KEY (sender_id) REFERENCES users (id),
     FOREIGN KEY (receiver_id) REFERENCES users (id)

@@ -1,11 +1,17 @@
 package net.de1mos.yams
 
-class DuplicateUsernameException(username: String) : RuntimeException("Username $username already exists")
+open class BadRequestException(message: String): RuntimeException(message)
 
-class SenderAndReceiverAreSameException : RuntimeException("Can't send message to self")
+open class ConflictException(message: String): RuntimeException(message)
 
-class SearchUserNotProvided : RuntimeException("User to search from not provided")
+class DuplicateUsernameException(username: String) : ConflictException("Username $username already exists")
 
-class CurrentUserDoesNotExistsException : RuntimeException("Current user does not exists")
+class SenderAndReceiverAreSameException : BadRequestException("Can't send message to self")
 
-class UserDoesNotExistsException(userId: Long) : RuntimeException("User $userId does not exists ")
+class SearchUserNotProvided : BadRequestException("User to search from not provided")
+
+class CurrentUserDoesNotExistException : RuntimeException("Current user does not exist")
+
+class UserDoesNotExistException(userId: Long) : RuntimeException("User $userId does not exist")
+
+class MessageContentTooLongException: BadRequestException("Message content is too long")
