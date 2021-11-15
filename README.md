@@ -1,4 +1,4 @@
-# yams
+# YAMS
 Yet  another messaging system
 
 ## Description
