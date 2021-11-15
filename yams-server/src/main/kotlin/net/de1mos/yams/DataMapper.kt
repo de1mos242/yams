@@ -8,9 +8,6 @@ import net.de1mos.yams.db.tables.records.UsersRecord
 import org.jooq.Record
 import org.springframework.stereotype.Service
 import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
-import java.util.concurrent.TimeUnit
 
 @Service
 class DataMapper {

@@ -10,9 +10,7 @@ import net.de1mos.yams.db.tables.records.UsersRecord
 import org.jooq.DSLContext
 import org.jooq.exception.DataAccessException
 import org.jooq.exception.SQLStateClass
-import org.jooq.impl.DSL.exists
 import org.springframework.stereotype.Repository
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Repository

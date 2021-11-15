@@ -3,7 +3,6 @@ package net.de1mos.yams.api
 import net.de1mos.yams.BadRequestException
 import net.de1mos.yams.ConflictException
 import net.de1mos.yams.CurrentUserDoesNotExistException
-import net.de1mos.yams.DuplicateUsernameException
 import net.de1mos.yams.UserDoesNotExistException
 import net.de1mos.yams.api.model.ErrorResponse
 import org.slf4j.LoggerFactory

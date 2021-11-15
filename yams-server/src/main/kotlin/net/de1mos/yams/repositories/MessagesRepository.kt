@@ -1,7 +1,6 @@
 package net.de1mos.yams.repositories
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import net.de1mos.yams.db.tables.Messages.MESSAGES

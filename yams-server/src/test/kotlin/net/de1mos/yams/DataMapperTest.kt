@@ -9,7 +9,6 @@ import net.de1mos.yams.db.tables.Users.USERS
 import net.de1mos.yams.db.tables.records.MessagesRecord
 import net.de1mos.yams.db.tables.records.UsersRecord
 import org.jooq.Record
-import org.jooq.Record3
 import org.junit.jupiter.api.Test
 import java.time.OffsetDateTime
 import java.time.ZoneOffset

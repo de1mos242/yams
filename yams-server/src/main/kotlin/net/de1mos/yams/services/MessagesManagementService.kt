@@ -11,7 +11,6 @@ import net.de1mos.yams.db.tables.records.MessagesRecord
 import net.de1mos.yams.repositories.MessagesRepository
 import org.springframework.stereotype.Service
 import java.time.Clock
-import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 @Service

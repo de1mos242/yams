@@ -1,6 +1,5 @@
 package net.de1mos.yams.it
 
-import com.nhaarman.mockitokotlin2.whenever
 import net.de1mos.yams.api.model.Message
 import net.de1mos.yams.api.model.MessageRequest
 import net.de1mos.yams.api.model.User
@@ -10,16 +9,10 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
-import java.time.Clock
-import java.time.Instant
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient

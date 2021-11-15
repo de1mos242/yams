@@ -9,10 +9,9 @@ import net.de1mos.yams.DataMapper
 import net.de1mos.yams.api.model.User
 import net.de1mos.yams.db.tables.records.UsersRecord
 import net.de1mos.yams.repositories.UsersRepository
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 internal class UsersManagementServiceTest {
 
