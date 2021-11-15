@@ -1,5 +1,6 @@
 yams.db.url: postgresql://localhost:5432/yams
 
+
 spring:
   r2dbc:
     url: r2dbc:${yams.db.url}
@@ -10,3 +11,20 @@ spring:
     url: jdbc:${yams.db.url}
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: yams-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    bootstrap-servers: localhost:9094
+    properties:
+      spring.json.trusted.packages: '*'
+
+
+yams:
+  messages-topic: yams_msg

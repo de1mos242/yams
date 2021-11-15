@@ -8,6 +8,8 @@ import net.de1mos.yams.api.model.Message
 import net.de1mos.yams.api.model.MessageRequest
 import net.de1mos.yams.api.model.SearchType
 import net.de1mos.yams.db.tables.records.MessagesRecord
+import net.de1mos.yams.dto.MessageDto
+import net.de1mos.yams.messaging.MessageSender
 import net.de1mos.yams.repositories.MessagesRepository
 import org.springframework.stereotype.Service
 import java.time.Clock
@@ -17,16 +19,21 @@ import java.time.ZoneOffset
 class MessagesManagementService(
     private val messagesRepository: MessagesRepository,
     private val dataMapper: DataMapper,
-    private val clock: Clock
+    private val clock: Clock,
+    private val messageSender: MessageSender
 ) {
 
     suspend fun addMessage(senderId: Long, messageRequest: MessageRequest) {
-        val ts = clock.instant().atOffset(ZoneOffset.UTC)
+        val ts = clock.instant().atOffset(ZoneOffset.UTC).toLocalDateTime()
+        messageSender.sendMessage(MessageDto(senderId, messageRequest.receiverId, messageRequest.content, ts))
+    }
+
+    suspend fun storeMessage(messageDto: MessageDto) {
         val message = MessagesRecord()
-        message.content = messageRequest.content
-        message.senderId = senderId
-        message.receiverId = messageRequest.receiverId
-        message.messageTimestamp = ts.toLocalDateTime()
+        message.content = messageDto.content
+        message.senderId = messageDto.senderId
+        message.receiverId = messageDto.receiverId
+        message.messageTimestamp = messageDto.ts
         messagesRepository.insert(message)
     }
 

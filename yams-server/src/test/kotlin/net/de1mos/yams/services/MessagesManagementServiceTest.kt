@@ -17,6 +17,8 @@ import net.de1mos.yams.db.tables.Messages
 import net.de1mos.yams.db.tables.Users
 import net.de1mos.yams.db.tables.records.MessagesRecord
 import net.de1mos.yams.db.tables.records.UsersRecord
+import net.de1mos.yams.dto.MessageDto
+import net.de1mos.yams.messaging.MessageSender
 import net.de1mos.yams.repositories.MessagesRepository
 import org.jooq.Record
 import org.junit.jupiter.api.BeforeEach
@@ -36,28 +38,43 @@ internal class MessagesManagementServiceTest {
     private lateinit var clock: Clock
     private lateinit var messagesRepository: MessagesRepository
     private lateinit var dataMapper: DataMapper
+    private lateinit var messageSender: MessageSender
 
     @BeforeEach
     fun setUp() {
         clock = mock()
         messagesRepository = mock()
         dataMapper = DataMapper()
-        messagesManagementService = MessagesManagementService(messagesRepository, dataMapper, clock)
+        messageSender = mock()
+        messagesManagementService = MessagesManagementService(messagesRepository, dataMapper, clock, messageSender)
     }
 
     @Test
-    fun `Add new message`() {
+    fun `Add new message`() = runBlocking {
         val now = Instant.now()
         val senderId = 42L
         val content = "myContent"
         val receiverId = 512L
 
         whenever(clock.instant()).thenReturn(now)
-        val c = argumentCaptor<MessagesRecord>()
-        runBlocking {
+        val c = argumentCaptor<MessageDto>()
             messagesManagementService.addMessage(senderId, MessageRequest(content, receiverId))
+            verify(messageSender).sendMessage(c.capture())
+
+        val expected = MessageDto(senderId, receiverId, content, now.atOffset(ZoneOffset.UTC).toLocalDateTime())
+        assertEquals(expected, c.firstValue)
+    }
+
+    @Test
+    fun `Store message dto in db`() = runBlocking {
+        val now = Instant.now().atOffset(ZoneOffset.UTC).toLocalDateTime()
+        val senderId = 42L
+        val content = "myContent"
+        val receiverId = 512L
+
+        val c = argumentCaptor<MessagesRecord>()
+            messagesManagementService.storeMessage(MessageDto(senderId, receiverId, content, now))
             verify(messagesRepository).insert(c.capture())
-        }
 
         val expected = MessagesRecord(null, senderId, receiverId, content, now.atOffset(ZoneOffset.UTC).toLocalDateTime())
         assertEquals(expected, c.firstValue)

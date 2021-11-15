@@ -51,6 +51,8 @@ class WholeCycleTest {
             Message(6, "m6", user2, user1, OffsetDateTime.now())
         )
 
+        Thread.sleep(1000) // wait for kafka to process messages
+
         val sentMessages = getSentMessages(userId1)
         val expectedSentMessages = messages.filter { it.sender!!.id == userId1 }.sortedBy { it.id }
         assertThat(sentMessages).usingElementComparatorIgnoringFields("id", "timestamp").isEqualTo(expectedSentMessages)

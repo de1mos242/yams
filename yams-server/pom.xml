@@ -23,12 +23,12 @@
         <spring-fox.version>3.0.0</spring-fox.version>
         <flyway.version>8.0.4</flyway.version>
         <r2dbc-postgres.version>0.8.10.RELEASE</r2dbc-postgres.version>
-        <jdbc-postgres.version>42.2.19</jdbc-postgres.version>
+        <jdbc-postgres.version>42.3.1</jdbc-postgres.version>
         <jooq.version>3.15.4</jooq.version>
-        <jackson-kotlin.version>2.12.3</jackson-kotlin.version>
-        <mockito-kotlin.version>2.1.0</mockito-kotlin.version>
+        <jackson-kotlin.version>2.13.0</jackson-kotlin.version>
+        <mockito-kotlin.version>2.2.0</mockito-kotlin.version>
 
-        <junit-jupiter.version>5.5.0-M1</junit-jupiter.version>
+        <junit-jupiter.version>5.8.1</junit-jupiter.version>
     </properties>
 
     <dependencyManagement>
@@ -51,6 +51,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jooq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
 
         <dependency>
